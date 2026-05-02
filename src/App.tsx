@@ -6,12 +6,13 @@ import './index.css';
 import { SearchBar } from "./components/SearchBar";
 import { AddRecommendationForm } from "./components/AddRecommendationForm";
 import type { Recommendation } from "./types/recommendation";
+import type { FilterField } from "./types/SearchBarProps";
 
 export default function App() {
   const [recommendations, setRecommendations] = useState(initialRecommendations);
-  const [selectedRecommendationId, setSelectedRecommendationId] = useState<string>("");
+  const [selectedRecommendationId, setSelectedRecommendationId] = useState<string| null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [selectedFilter, setSelectedFilter] = useState<string>("city");
+  const [selectedFilter, setSelectedFilter] = useState<FilterField>("city");
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
 
   const filteredRecommendations = recommendations.filter((recommendation) => {
@@ -28,20 +29,28 @@ export default function App() {
     return true;
   });
 
-  const selectedRecommendation = filteredRecommendations.find(recommendation => recommendation.id === selectedRecommendationId);
+  const selectedRecommendation = recommendations.find(recommendation => recommendation.id === selectedRecommendationId);
 
   const handleLike = (id: string) => {
-    setRecommendations(filteredRecommendations.map(recommendation => recommendation.id === id ? { ...recommendation, isLiked: !recommendation.isLiked } : recommendation));
+    setRecommendations(prev => prev.map(recommendation =>
+      recommendation.id === id ? { ...recommendation, isLiked: !recommendation.isLiked } : recommendation));
   }
   const handleSave = (id: string) => {
-    setRecommendations(filteredRecommendations.map(recommendation => recommendation.id === id ? { ...recommendation, isSaved: !recommendation.isSaved } : recommendation));
+    setRecommendations(prev =>
+      prev.map(recommendation => recommendation.id === id ? { ...recommendation, isSaved: !recommendation.isSaved } : recommendation));
   }
   const handleDelete = (id: string) => {
-    setRecommendations(filteredRecommendations.filter(recommendation => recommendation.id !== id));
+    setRecommendations((prev) =>
+      prev.filter((recommendation) => recommendation.id !== id)
+    );
+
+    if (selectedRecommendationId === id) {
+      setSelectedRecommendationId(null);
+    }
   }
   const handleSelect = (id: string) => {
     if (selectedRecommendationId === id) {
-      setSelectedRecommendationId("");
+      setSelectedRecommendationId(null);
     }
     else {
       setSelectedRecommendationId(id);
@@ -51,7 +60,7 @@ export default function App() {
     setSearchTerm(searchText);
   }
 
-  const handleFilterChange = (filter: string) => {
+  const handleFilterChange = (filter: FilterField) => {
     setSelectedFilter(filter);
   }
 

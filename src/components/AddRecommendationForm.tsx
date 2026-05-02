@@ -1,8 +1,8 @@
 import { useState } from "react";
 import type { Recommendation } from "../types/recommendation";
-import type { RecommendationCategory, RecommendationFormProps } from "../types/RecommendationFormProps";
+import type { RecommendationCategory, RecommendationForm } from "../types/RecommendationForm";
 
-export function AddRecommendationForm({ onAdd, onClose, }: RecommendationFormProps) {
+export function AddRecommendationForm({ onAdd, onClose, }: RecommendationForm) {
     const [title, setTitle] = useState<string>("");
     const [city, setCity] = useState<string>("");
     const [country, setCountry] = useState<string>("");

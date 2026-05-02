@@ -1,7 +1,7 @@
 import type { Recommendation } from "./recommendation";
 export type RecommendationCategory = Recommendation["category"];
 
-export type RecommendationFormProps = {
+export type RecommendationForm = {
     onAdd: (recommendation: Recommendation) => void;
     onClose: () => void;
   };

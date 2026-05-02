@@ -1,4 +1,4 @@
-import type { SearchBarProps } from "../types/SearchBarProps";
+import type { FilterField, SearchBarProps } from "../types/SearchBarProps";
 
 export function SearchBar(props: SearchBarProps) {
     return (
@@ -15,7 +15,7 @@ export function SearchBar(props: SearchBarProps) {
             <select
                 value={props.selectedFilter}
                 onChange={(event) =>
-                    props.handleFilterChange(event.target.value)
+                    props.handleFilterChange(event.target.value as FilterField)
                 }
             >
                 <option value="city">City</option>
