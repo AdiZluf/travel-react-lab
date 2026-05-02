@@ -4,12 +4,15 @@ import { RecommendationList } from "./components/RecommendationList";
 import { initialRecommendations } from "./data/initialRecommendations";
 import './index.css';
 import { SearchBar } from "./components/SearchBar";
+import { AddRecommendationForm } from "./components/AddRecommendationForm";
+import type { Recommendation } from "./types/recommendation";
 
 export default function App() {
   const [recommendations, setRecommendations] = useState(initialRecommendations);
   const [selectedRecommendationId, setSelectedRecommendationId] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedFilter, setSelectedFilter] = useState<string>("city");
+  const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
 
   const filteredRecommendations = recommendations.filter((recommendation) => {
     const searchValue = searchTerm.toLowerCase();
@@ -52,6 +55,10 @@ export default function App() {
     setSelectedFilter(filter);
   }
 
+  const handleAddRecommendation = (recommendation: Recommendation) => {
+    setRecommendations((prev) => [...prev, recommendation]);
+  };
+
   return <div className='bg-gray-100 min-h-screen p-4 flex flex-col gap-4 w-full max-w-7xl mx-auto text-center'>
     <div>
       <SearchBar
@@ -69,6 +76,19 @@ export default function App() {
           handleDelete,
           handleSelect
         }} />
+    </div>
+    <div>
+      <button className="cursor-pointer" onClick={() => setIsFormOpen(true)}>
+        Add New Recommendation
+      </button>
+
+      {
+        isFormOpen && (
+          <AddRecommendationForm
+            onAdd={handleAddRecommendation}
+            onClose={() => setIsFormOpen(false)}
+          />
+        )}
     </div>
     <div>
       <RecommendationsDetails recommendation={selectedRecommendation}></RecommendationsDetails>
